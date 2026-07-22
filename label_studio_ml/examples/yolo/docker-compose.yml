@@ -32,6 +32,7 @@ services:
       - LABEL_STUDIO_HOST=${LABEL_STUDIO_HOST:-http://host.docker.internal:8080}
       - LABEL_STUDIO_API_KEY=${LABEL_STUDIO_API_KEY}
       - LABEL_STUDIO_URL=${LABEL_STUDIO_URL}
+      - LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio-files
 
       # YOLO parameters
 
@@ -52,3 +53,4 @@ services:
       - "./data/server:/data"
       - "./models:/app/models"
       - "./cache_dir:/app/cache_dir"
+      - "${LABEL_STUDIO_LOCAL_FILES_DATA_ROOT}:/label-studio-files"
