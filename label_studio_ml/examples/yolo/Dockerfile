@@ -50,8 +50,8 @@ WORKDIR /app
 COPY . ./
 
 # Download the YOLO models
-RUN /bin/sh -c 'if [ ! -f /app/models/yolov26n.pt ]; then \
-    yolo predict model=/app/models/yolov26n.pt source=/app/tests/car.jpg; \
+RUN /bin/sh -c 'if [ ! -f /app/models/yolo26n.pt ]; then \
+    yolo predict model=/app/models/yolo26n.pt source=/app/tests/car.jpg; \
     fi'
 
 ENV PYTHONPATH=/app
