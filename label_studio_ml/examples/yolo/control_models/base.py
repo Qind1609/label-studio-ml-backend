@@ -1,4 +1,5 @@
 import os
+import shutil
 import logging
 
 from pydantic import BaseModel
@@ -185,6 +186,24 @@ class ControlModel(BaseModel):
             if os.path.exists(task_path)
             else self.label_studio_ml_backend.get_local_path(task_path, task_id=task.get("id"))
         )
+
+        # The Label Studio SDK caches downloaded files without extensions (e.g. 'a328d2a1__').
+        # Ultralytics YOLO requires a file extension to identify the image/video format.
+        # If the cached file has no extension, copy it with the original extension from the URL.
+        if os.path.exists(path) and not os.path.splitext(path)[1]:
+            # extract extension from the original task URL
+            from urllib.parse import urlparse, parse_qs
+            parsed = urlparse(task_path)
+            # handle local storage URLs like /data/local-files/?d=path/to/image.jpg
+            original_name = parse_qs(parsed.query).get("d", [parsed.path])[0]
+            ext = os.path.splitext(original_name)[1]
+            if ext:
+                new_path = path + ext
+                if not os.path.exists(new_path):
+                    shutil.copy2(path, new_path)
+                path = new_path
+                logger.debug(f"Copied cached file with extension: {new_path}")
+
         logger.debug(f"load_image: {task_path} => {path}")
         return path
 
