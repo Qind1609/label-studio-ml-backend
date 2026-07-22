@@ -9,9 +9,7 @@ if [ ! -f .env ]; then
 fi
 
 if [ -f ".env" ]; then
-     echo "Exporting environment variables from .env file..."
-    echo "Contents of .env file:"
-    cat .env
+    echo "Exporting environment variables from .env file..."
     set -a
     . ./.env
     set +a
