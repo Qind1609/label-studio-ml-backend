@@ -42,7 +42,7 @@ COPY requirements-test.txt .
 # build only when TEST_ENV="true"
 RUN --mount=type=cache,target=${PIP_CACHE_DIR},sharing=locked \
     if [ "$TEST_ENV" = "true" ]; then \
-      pip3 install -r requirements-test.txt; \
+    pip3 install -r requirements-test.txt; \
     fi
 
 WORKDIR /app
@@ -50,11 +50,8 @@ WORKDIR /app
 COPY . ./
 
 # Download the YOLO models
-RUN /bin/sh -c 'if [ ! -f /app/models/yolov8m.pt ]; then \
-    yolo predict model=/app/models/yolov8m.pt source=/app/tests/car.jpg \
-    && yolo predict model=/app/models/yolov8n.pt source=/app/tests/car.jpg \
-    && yolo predict model=/app/models/yolov8n-cls.pt source=/app/tests/car.jpg \
-    && yolo predict model=/app/models/yolov8n-seg.pt source=/app/tests/car.jpg; \
+RUN /bin/sh -c 'if [ ! -f /app/models/yolov26n.pt ]; then \
+    yolo predict model=/app/models/yolov26n.pt source=/app/tests/car.jpg; \
     fi'
 
 ENV PYTHONPATH=/app
